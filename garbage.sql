@@ -186,3 +186,35 @@ SELECT t.truck_id_PK AS 'Truck ID', t.truck_name AS 'Truck Name', d.driver_id_PK
         LEFT JOIN Drivers AS d
         	ON d.driver_id_PK = dt.driver_id_FK
         ORDER BY d.driver_id_PK
+
+-- 5. List ALL the DRIVERS that a single TRUCK has
+
+SELECT t.truck_id_PK as 'Truck ID', t.truck_name AS 'Truck Name', d.driver_id_PK AS 'Driver ID', d.driver_name AS 'Driver Name'
+	FROM Trucks AS t
+        INNER JOIN DriversTrucks as dt
+        	ON t.truck_id_PK = dt.truck_id_FK
+        LEFT JOIN Drivers as d
+        	ON d.driver_id_PK = dt.driver_id_FK
+        WHERE t.truck_id_PK = 1
+        ORDER BY d.driver_id_PK
+
+-- 6. Insert 2 new TRUCKS that *DON'T* have DRIVERS assigned to them
+
+INSERT INTO Trucks (truck_name)
+	VALUES 	("Hooter"),
+        	("Honker");
+
+-- So there is a problem with this: I can't insert NULL as a value 
+-- into trucks_id_FK because there is a FK constraint on it, meaning it can't
+-- be NULL. One possible solution is to remove that constraint, so that I can
+-- use a NULL value without MySQL throwing an error.
+
+INSERT INTO DriversTrucks (driver_id_FK, truck_id_FK)
+	VALUES	(NULL, 4),
+        	(NULL, 5);
+
+
+
+-- 7. List ALL the TRUCKS that don't have DRIVERS assigned to them
+
+
